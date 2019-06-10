@@ -35,7 +35,15 @@ server.get('/users', (req, res) => {
 
 // Returns the user object with the specified id:
 server.get('/users/:id', (req, res) => {
-
+    db.findById(id)
+    .then(count => {
+        if (count) {
+            res.sendStatus(204).end()
+        } else {
+            res.status(404).json({ message: 'The user with the specified ID does not exist' })
+        }
+    })
+    .catch(err => res.status(500).json({ err: 'The user information could not be retrieved' }))
 });
 
 

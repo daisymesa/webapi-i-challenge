@@ -1,19 +1,4 @@
 // implement your API here
-/*
-const express = require('express');
-const db = require('./data/db');
-
-const server = express();
-
-server.use(express.json());
-
-server.get('/', (req, res) => {
-    res.status(200).send('Hello again Web19!')
-})
-
-server.listen(4000, () => console.log('My second express server is running on port 4000!'));
-*/
-
 const express = require('express'); // import the express package
 
 const server = express(); // creates the server
@@ -22,6 +7,37 @@ const server = express(); // creates the server
 server.get('/', (req, res) => {
   res.send('Hello from Express');
 });
+
+// ---- ENDPOINTS ----
+
+// Creates a user using the information sent inside the request body:
+server.post('/users', (req, res) => {
+
+});
+
+
+// Returns an array of all the user objects contained in the database.
+server.get('/users', (req, res) => {
+
+});
+
+
+// Returns the user object with the specified id.
+server.get('/users/:id', (req, res) => {
+
+});
+
+
+// Removes the user with the specified id and returns the deleted user.
+server.delete('/users/:id', (req, res) => {
+
+});
+
+// Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original.
+server.put('/users/:id', (req, res) => {
+
+})
+
 
 // watch for connections on port 5000
 server.listen(5000, () =>

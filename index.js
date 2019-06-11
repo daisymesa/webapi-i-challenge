@@ -16,12 +16,14 @@ server.get('/', (req, res) => {
 
 // Creates a user using the information sent inside the request body:
 server.post('/users', (req, res) => {
-    /*
-        const newUser = req.body;
-        db.insert(newUser)
-            .then()
-            .catch()
-    */
+
+    const { name, bio, created_at, updated_at } = req.body;
+    if (name === undefined || bio === undefined) {
+        res.status(400).json({ errorMessage: 'Please provide name and bio for the user.' })
+    } else {
+        db.insert(req.body)
+    }
+    db.catch(error => res.status(500).json({ error: 'There was an error while saving the user to the database' }))
 });
 
 
@@ -29,21 +31,21 @@ server.post('/users', (req, res) => {
 server.get('/users', (req, res) => {
     db.find()
         .then(users => res.status(201).json(users))
-        .catch(err => res.status(500).json({ err: 'The users information could not be retrieved' }))
+        .catch(error => res.status(500).json({ error: 'The users information could not be retrieved' }))
 });
 
 
 // Returns the user object with the specified id:
 server.get('/users/:id', (req, res) => {
     db.findById(id)
-    .then(count => {
-        if (count) {
-            res.sendStatus(204).end()
-        } else {
-            res.status(404).json({ message: 'The user with the specified ID does not exist' })
-        }
-    })
-    .catch(err => res.status(500).json({ err: 'The user information could not be retrieved' }))
+        .then(count => {
+            if (count) {
+                res.sendStatus(204).end()
+            } else {
+                res.status(404).json({ message: 'The user with the specified ID does not exist' })
+            }
+        })
+        .catch(error => res.status(500).json({ error: 'The user information could not be retrieved' }))
 });
 
 
@@ -58,12 +60,22 @@ server.delete('/users/:id', (req, res) => {
                 res.status(404).json({ message: 'The user with the specified ID does not exist' })
             }
         })
-        .catch(err => res.status(500).json({ err: 'The user could not be removed' }))
+        .catch(error => res.status(500).json({ error: 'The user could not be removed' }))
 });
 
 // Updates the user with the specified id using data from the request body. Returns the modified document, NOT the original:
 server.put('/users/:id', (req, res) => {
-
+    const id = req.params.id;
+    const user = req.body;
+    db.update(id, user)
+        .then(count => {
+            if (count) {
+                res.status(200).json({ success: true, count })
+            } else {
+                res.status(404).json({ message: 'There is ano hub with the specified id' })
+            }
+        })
+        .catch(error => res.status(500).json({ error: 'The user information could not be modified' }))
 })
 
 
